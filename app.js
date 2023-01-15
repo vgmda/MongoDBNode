@@ -1,7 +1,7 @@
 const express = require('express')
 const { connectToDb, getDb } = require('./db')
 
-// Init & middleware
+// Init & Middleware
 const app = express()
 
 // Connect to Db
@@ -22,7 +22,7 @@ connectToDb((err) => {
 app.get('/books', (req, res) => {
 
     // Empty array to store all the returned books
-    let book = []
+    let books = []
 
     // find() returns a cursor 
     // Next step is to fetch the cursor (data) using toArray or forEach
@@ -32,15 +32,13 @@ app.get('/books', (req, res) => {
 
     db.collection('books')
         .find()
-        .sort({ title: 1 })
+        // .sort({ title: 1 })
         .forEach(book => books.push(book))
         .then(() => {
             res.status(200).json(books)
         })
         .catch(() => {
-            res.status(500).json({ error: "Could not fetch the documents" })
+            res.status(500).json({ error: 'Could not fetch the documents' })
         })
-
-    res.json({ mssg: "*** API is now working ***" })
 })
 
