@@ -26,6 +26,9 @@ app.get('/books', (req, res) => {
     // Empty array to store all the returned books
     let books = []
 
+    const page = req.query.page || 0
+    const booksPerPage = 3
+
     // find() returns a cursor 
     // Next step is to fetch the cursor (data) using toArray or forEach
     // forEach is used to push the books to an array
@@ -35,6 +38,8 @@ app.get('/books', (req, res) => {
     db.collection('books')
         .find()
         .sort({ title: 1 })
+        .skip(page * booksPerPage)
+        .limit(booksPerPage)
         .forEach(book => books.push(book))
         .then(() => {
             res.status(200).json(books)
